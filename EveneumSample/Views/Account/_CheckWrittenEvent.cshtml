@@ -1,0 +1,15 @@
+﻿@model EveneumSample.Events.CheckWrittenEvent
+@using EveneumSample.Helpers
+
+<td>
+    @Html.DisplayFor(model => model.Date)
+</td>
+<td>
+    @Html.DisplayFor(model => model.Number)
+</td>
+<td>
+    Check to @Html.DisplayFor(model => model.PayTo)
+</td>
+<td>
+    @CurrencyHelper.Render(-Model.Amount)
+</td>

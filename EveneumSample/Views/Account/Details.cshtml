@@ -1,0 +1,65 @@
+﻿@using EveneumSample.Helpers
+
+@{
+    ViewData["Title"] = "Account";
+    var stream = (Eveneum.Stream)ViewData["Stream"];
+    var snapshots = stream.Snapshot.HasValue ? "since Snapshot(s)" : "with no Snapshots";
+    var total = (decimal)ViewData["Total"];
+}
+
+<h1>Account - @stream.StreamId</h1>
+
+<form method="post">
+    <h4 style="display: inline;">
+        @stream.Events.Length Event(s) @snapshots
+    </h4>
+
+    <button asp-route="AddCheck" asp-route-id=@stream.StreamId class="btn-primary" style="display: inline;">Add Check</button>
+    <button asp-route="AddDeposit" asp-route-id=@stream.StreamId class="btn-primary" style="display: inline;">Add Deposit</button>
+    <button asp-route="CloseAccount" asp-route-id=@stream.StreamId class="btn-primary" style="display: inline;">Close Account</button>
+
+<table class="table">
+    <tr>
+        <th>Version</th>
+        <th>Event Type</th>
+        <th>Date</th>
+        <th>Check#</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th></th>
+    </tr>
+    @if (stream.Snapshot.HasValue)
+    {
+        <partial name="_AccountSummarySnapshot" , for=@stream.Snapshot />
+    }
+
+
+    @foreach (var streamEvent in @stream.Events)
+    {
+        string eventName = streamEvent.Body.GetType().ToString().Split('.').Last();
+        string viewName = $"_{eventName}";
+        <tr>
+            <td>@streamEvent.Version</td>
+            <td>@eventName</td>
+            <partial name="@viewName", for=@streamEvent.Body />
+            <td>
+                <button asp-route="MakeSnapshot" asp-route-id=@stream.StreamId asp-route-version="@streamEvent.Version  "class="btn-secondary">Make Snapshot</button>
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td align="right">
+            <strong>Total</strong>
+        </td>
+        <td>
+            <strong>@CurrencyHelper.Render(total)</strong>
+        </td>
+    </tr>
+</table>
+
+</form>
