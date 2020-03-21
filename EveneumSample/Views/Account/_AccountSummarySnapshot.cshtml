@@ -1,0 +1,30 @@
+﻿@model Eveneum.Snapshot
+@using EveneumSample.Helpers
+
+@{
+    var summary = (EveneumSample.Events.AccountSummary)Model.Data;
+}
+
+
+<td>
+    @Html.DisplayFor(model => model.Version)
+</td>
+<td>
+    Snapshot
+</td>
+<td>
+    @summary.Date.ToShortDateString()
+</td>
+<td>
+</td>
+<td>
+    Account summarized with snapshot
+</td>
+<td>
+    @CurrencyHelper.Render(summary.Amount)
+</td>
+<td>
+    <button asp-route="DeleteSnapshots" asp-route-id=@summary.AccountNumber asp-route-version=@Model.Version class="btn-warning">
+        Delete Snapshots
+    </button>
+</td>

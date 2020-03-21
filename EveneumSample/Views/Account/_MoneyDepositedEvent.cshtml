@@ -1,0 +1,14 @@
+﻿@model EveneumSample.Events.MoneyDepositedEvent
+@using EveneumSample.Helpers
+
+<td>
+    @Html.DisplayFor(model => model.Date)
+</td>
+<td>
+</td>
+<td>
+    Deposit from  @Html.DisplayFor(model => model.Source)
+</td>
+<td>
+    @CurrencyHelper.Render(Model.Amount)
+</td>
